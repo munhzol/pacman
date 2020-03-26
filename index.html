@@ -43,6 +43,7 @@
             width: 20px;
             height: 20px;
         }
+
         div#score {
             border: 1px solid white;
             width: 30px;
@@ -66,12 +67,16 @@
 
 
         var world = [
-            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [2, 0, 2, 1, 1, 1, 2, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2],
-            [2, 1, 1, 1, 2, 1, 1, 1, 1, 2],
-            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+            [2, 0, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
+            [2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2],
+            [2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
+            [2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ];
 
         var pacman = {
@@ -120,18 +125,31 @@
 
 
         document.onkeydown = function (e) {
+
             console.log(e.keyCode);
             if (e.keyCode == 37) {
-                pacman.x--;
+                if (world[pacman.y][pacman.x - 1] !== 2) {
+                    pacman.x--;
+                }
             } else if (e.keyCode == 38) {
-                pacman.y--;
+                if (world[pacman.y - 1][pacman.x] !== 2) {
+                    pacman.y--;
+                }
             } else if (e.keyCode == 39) {
-                pacman.x++;
+                if (world[pacman.y][pacman.x + 1] !== 2) {
+                    pacman.x++;
+                }
             } else if (e.keyCode == 40) {
-                pacman.y++;
+                if (world[pacman.y + 1][pacman.x] !== 2) {
+                    pacman.y++;
+                }
             }
 
-            if(world[pacman.y][pacman.x]===1){
+            if (world[pacman.y][pacman.x] === 2) {
+                return false;
+            }
+
+            if (world[pacman.y][pacman.x] === 1) {
                 world[pacman.y][pacman.x] = 0;
                 score++;
                 displayWorld();
