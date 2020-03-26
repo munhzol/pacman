@@ -9,24 +9,20 @@
     <style>
         body {
             background-color: black;
-        }
-        
-        .row {
-            padding: 0px;
             margin: 0px;
         }
+
+        .row {}
 
         div.row div {
             width: 20px;
             height: 20px;
-            border: 1px solid #000000;
             display: inline-block;
-            padding: 0px;
-            margin: 0px;
         }
 
         div.brick {
             background-color: blue;
+            display: inline-block;
         }
 
         div.empty {}
@@ -43,19 +39,26 @@
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
+            position: absolute;
             width: 20px;
             height: 20px;
-            position: absolute;
-            top: 33px;
-            left: 33px;
+        }
+        div#score {
+            border: 1px solid white;
+            width: 30px;
+            height: 20px;
+            color: white;
+            padding: 7px;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <div>
-        <div id="world"></div>
-        <div id="pacman"></div>    
+    <div id="container">
+        <div id='world'></div>
+        <div id="pacman"></div>
+        <div id="score"></div>
     </div>
 
     <script>
@@ -64,36 +67,80 @@
 
         var world = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [2, 1, 2, 1, 1, 1, 2, 1, 1, 2],
+            [2, 0, 2, 1, 1, 1, 2, 1, 1, 2],
             [2, 1, 2, 1, 2, 1, 2, 1, 1, 2],
             [2, 1, 2, 1, 2, 1, 2, 1, 1, 2],
             [2, 1, 1, 1, 2, 1, 1, 1, 1, 2],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ];
 
+        var pacman = {
+            x: 1,
+            y: 1
+        }
+
+        var score = 0;
+
         function displayWorld() {
-            var output = "";
+
+            var output = '';
             for (var i = 0; i < world.length; i++) {
-                output = output + "<div class='row'>\n";
+                output += "<div class='row'>";
                 for (var j = 0; j < world[i].length; j++) {
                     if (world[i][j] == 3)
-                        output = output + "<div id='pacman'></div>";
-
+                        output += "<div id='pacman'>&nbsp;</div>";
+                    else
                         if (world[i][j] == 2)
-                        output = output + "<div class='brick'></div>";
-
-                    if (world[i][j] == 1)
-                        output = output + "<div class='coin'></div>";
-
-                    if (world[i][j] == 0)
-                        output = output + "<div class='empty'></div>";
+                            output += "<div class='brick'>&nbsp;</div>";
+                        else
+                            if (world[i][j] == 1)
+                                output += "<div class='coin'>&nbsp;</div>";
+                            else
+                                if (world[i][j] == 0)
+                                    output += "<div class='empty'>&nbsp;</div>";
                 }
-                output = output + "</div>";
+                output += "</div>";
             }
+
             document.getElementById('world').innerHTML = output;
         }
 
+        function displayPacman() {
+            document.getElementById('pacman').style.top = pacman.y * 20 + 'px';
+            document.getElementById('pacman').style.left = pacman.x * 20 + 'px';
+        }
+
+        function displayScore() {
+            document.getElementById('score').innerHTML = score;
+        }
+
         displayWorld();
+        displayPacman();
+        displayScore();
+
+
+        document.onkeydown = function (e) {
+            console.log(e.keyCode);
+            if (e.keyCode == 37) {
+                pacman.x--;
+            } else if (e.keyCode == 38) {
+                pacman.y--;
+            } else if (e.keyCode == 39) {
+                pacman.x++;
+            } else if (e.keyCode == 40) {
+                pacman.y++;
+            }
+
+            if(world[pacman.y][pacman.x]===1){
+                world[pacman.y][pacman.x] = 0;
+                score++;
+                displayWorld();
+                displayScore();
+            }
+
+            displayPacman();
+        }
+
     </script>
 
 
