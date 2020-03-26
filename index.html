@@ -136,20 +136,22 @@
             console.log(e.keyCode);
             if (e.keyCode == 37) {
                 if (world[pacman.y][pacman.x - 1] !== 2) {
+                    document.getElementById("pacman").style.transform = "rotate(180deg)";
                     pacman.x--;
-                    document.getElementById('pacman').style.transform()
-                    transform: rotate(45deg); /* Equal to rotateZ(45deg) */
                 }
             } else if (e.keyCode == 38) {
                 if (world[pacman.y - 1][pacman.x] !== 2) {
+                    document.getElementById("pacman").style.transform = "rotate(-90deg)";
                     pacman.y--;
                 }
             } else if (e.keyCode == 39) {
                 if (world[pacman.y][pacman.x + 1] !== 2) {
+                    document.getElementById("pacman").style.transform = "rotate(0deg)";
                     pacman.x++;
                 }
             } else if (e.keyCode == 40) {
                 if (world[pacman.y + 1][pacman.x] !== 2) {
+                    document.getElementById("pacman").style.transform = "rotate(90deg)";
                     pacman.y++;
                 }
             }
