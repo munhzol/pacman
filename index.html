@@ -12,8 +12,6 @@
             margin: 0px;
         }
 
-        .row {}
-
         div.row div {
             width: 20px;
             height: 20px;
@@ -32,8 +30,6 @@
             background-size: cover;
         }
 
-        div.empty {}
-
         div.coin {
             background-image: url(img/coin.gif);
             background-repeat: no-repeat;
@@ -51,6 +47,16 @@
             height: 20px;
         }
 
+        div#ghost {
+            background-image: url(img/ghost.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 75% 75%;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+        }
+
         div#score {
             border: 1px solid white;
             width: 30px;
@@ -59,6 +65,17 @@
             padding: 7px;
             text-align: center;
         }
+
+        div#looser {
+            background-image: url(img/looser.gif);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 75% 75%;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            display: none;
+        }
     </style>
 </head>
 
@@ -66,12 +83,12 @@
     <div id="container">
         <div id='world'></div>
         <div id="pacman"></div>
+        <div id="ghost"></div>
         <div id="score"></div>
+        <div id="looser"></div>
     </div>
 
     <script>
-        // 1. Display world brick/coin/etc
-
 
         var world = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -91,7 +108,14 @@
             y: 1
         }
 
+        var ghost = {
+            x: 1,
+            y: 2,
+            direction: 1, // u - 0, d - 1, l -2 , r - 3
+        }
         var score = 0;
+
+        var gameison = true;
 
         function displayWorld() {
 
@@ -122,14 +146,33 @@
             document.getElementById('pacman').style.left = pacman.x * 20 + 'px';
         }
 
+        function displayGhost() {
+            document.getElementById('ghost').style.top = ghost.y * 20 + 'px';
+            document.getElementById('ghost').style.left = ghost.x * 20 + 'px';
+        }
+
         function displayScore() {
             document.getElementById('score').innerHTML = score;
         }
 
+        function gameover() {
+            document.getElementById('looser').style.top = pacman.y * 20 + 'px';
+            document.getElementById('looser').style.left = pacman.x * 20 + 'px';
+            document.getElementById('pacman').style.display = 'none';
+            document.getElementById('ghost').style.display = 'none';
+            document.getElementById('looser').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('ghost').style.display = 'block';
+                document.getElementById('looser').style.display = 'none';
+            }, 2000);
+            gameison = false;
+        }
+
+
         displayWorld();
         displayPacman();
         displayScore();
-
+        displayGhost();
 
         document.onkeydown = function (e) {
 
@@ -176,6 +219,62 @@
 
             displayPacman();
         }
+
+
+        function ghostNextMove() {
+            var step = 0;
+            var dir;
+            do {
+
+                if (ghost.direction === 0 && world[ghost.y - 1][ghost.x] !== 2) {
+                    ghost.y--;
+                    step = 1;
+                } else if (ghost.direction === 1 && world[ghost.y + 1][ghost.x] !== 2) {
+                    ghost.y++;
+                    step = 1;
+                } else if (ghost.direction === 2 && world[ghost.y][ghost.x + 1] !== 2) {
+                    ghost.x++;
+                    step = 2;
+                } else if (ghost.direction === 3 && world[ghost.y][ghost.x - 1] !== 2) {
+                    ghost.x--;
+                    step = 3;
+                }
+
+                ghost.direction = Math.floor(Math.random() * 3);
+
+            } while (step == 0);
+        }
+
+        var ghostMove = setInterval(function () {
+
+            ghostNextMove();
+            displayGhost();
+
+        }, 500);
+
+
+        var mainCycle = setInterval(function () {
+            if (pacman.y == ghost.y && pacman.x == ghost.x) {
+                gameover();
+            }
+            if (!gameison) {
+                clearInterval(ghostMove);
+                clearInterval(mainCycle);
+            }
+        }, 100);
+
+
+
+
+//         while(1){
+//             setTimeout(() => {
+
+//                 ghost.y++;
+//                 console.log(ghost);
+//  //               displayGhost();
+//             }, 1000);
+//         }
+
 
     </script>
 
