@@ -25,6 +25,13 @@
             display: inline-block;
         }
 
+        div.cherry {
+            background-image: url(img/cherry.png);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
         div.empty {}
 
         div.coin {
@@ -68,14 +75,14 @@
 
         var world = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-            [2, 0, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
-            [2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2],
-            [2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
-            [2, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1, 1, 2],
-            [2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2],
+            [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 3, 2],
+            [2, 1, 2, 3, 2, 1, 2, 1, 2, 1, 2, 1, 2],
+            [2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2],
+            [2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2],
+            [2, 1, 2, 1, 2, 1, 2, 3, 2, 1, 2, 1, 2],
+            [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ];
 
@@ -93,7 +100,7 @@
                 output += "<div class='row'>";
                 for (var j = 0; j < world[i].length; j++) {
                     if (world[i][j] == 3)
-                        output += "<div id='pacman'>&nbsp;</div>";
+                        output += "<div class='cherry'>&nbsp;</div>";
                     else
                         if (world[i][j] == 2)
                             output += "<div class='brick'>&nbsp;</div>";
@@ -130,6 +137,8 @@
             if (e.keyCode == 37) {
                 if (world[pacman.y][pacman.x - 1] !== 2) {
                     pacman.x--;
+                    document.getElementById('pacman').style.transform()
+                    transform: rotate(45deg); /* Equal to rotateZ(45deg) */
                 }
             } else if (e.keyCode == 38) {
                 if (world[pacman.y - 1][pacman.x] !== 2) {
@@ -152,6 +161,13 @@
             if (world[pacman.y][pacman.x] === 1) {
                 world[pacman.y][pacman.x] = 0;
                 score++;
+                displayWorld();
+                displayScore();
+            }
+
+            if (world[pacman.y][pacman.x] === 3) {
+                world[pacman.y][pacman.x] = 0;
+                score += 5;
                 displayWorld();
                 displayScore();
             }
